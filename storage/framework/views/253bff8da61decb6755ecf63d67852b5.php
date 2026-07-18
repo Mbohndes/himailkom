@@ -71,9 +71,9 @@
 
     <section id="beranda" class="relative w-full h-screen min-h-[700px] flex items-center justify-start overflow-hidden bg-slate-900">
         <div class="absolute inset-0 w-full h-full">
-            <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80" alt="Kegiatan HIMA" class="w-full h-full object-cover opacity-80">
+            <img src="hima.png" alt="Kegiatan HIMA" class="w-full h-full object-cover opacity-80">
         </div>
-        <div class="absolute inset-0 bg-gradient-to-r from-slate-900/95 via-slate-900/70 to-transparent backdrop-blur-[2px]"></div>
+        <div class="absolute inset-0 bg-gradient-to-r from-slate-900/95 via-slate-900/70 "></div>
 
         <div class="relative z-10 w-full max-w-[1400px] mx-auto px-6 lg:px-12 flex">
             <div class="w-full lg:w-[65%] flex flex-col justify-center">
@@ -110,9 +110,9 @@
             <div class="flex flex-col lg:flex-row items-center gap-8 lg:gap-12 mb-20">
                 <!-- Gambar (Diperkecil Tinggi & Radiusnya) -->
                 <div class="w-full lg:w-5/12 h-[280px] lg:h-[350px] rounded-[32px] overflow-hidden relative shadow-xl shadow-slate-200">
-                    <img src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Kegiatan HIMA" class="w-full h-full object-cover">
+                    <img src="ilkom.jpeg" alt="Kegiatan HIMA" class="w-full h-full object-cover">
                     <div class="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full font-bold text-[#5442F5] text-xs shadow-md">
-                        Berdiri Sejak 2010
+                        
                     </div>
                 </div>
                 
@@ -173,6 +173,27 @@
                 <?php else: ?>
                     
                     <?php if($pengurusInti->isNotEmpty()): ?>
+                        <?php
+                            // Urutkan BPH (Ketua -> Wakahim -> Sekre -> Bendum)
+                            $urutanPrioritas = [
+                                'ketua hima'   => 1,
+                                'ketua'        => 1,
+                                'wakahim'      => 2,
+                                'wakil ketua'  => 2,
+                                'sekretaris'   => 3,
+                                'sekretaris 1' => 3,
+                                'sekretaris 2' => 4,
+                                'bendahara'    => 5,
+                                'bendahara 1'  => 5,
+                                'bendahara 2'  => 6,
+                            ];
+
+                            $pengurusInti = $pengurusInti->sortBy(function($bph) use ($urutanPrioritas) {
+                                $jabatan = strtolower($bph->jabatan ?? $bph->position ?? $bph->getRoleNames()->first() ?? 'bph');
+                                return $urutanPrioritas[$jabatan] ?? 99;
+                            })->values();
+                        ?>
+
                         <div class="mb-14">
                             <div class="flex items-center justify-center gap-3 mb-8">
                                 <div class="h-px bg-slate-200 w-12 lg:w-24"></div>
