@@ -81,7 +81,7 @@
                     <span class="text-base">🏛</span> Himpunan Mahasiswa Ilmu Komputer
                 </div>
                 <h1 class="animate-fade-in-up delay-100 text-4xl sm:text-5xl lg:text-[4.5rem] font-extrabold text-white leading-[1.1] tracking-tight mb-6">
-                    Bangun Generasi Informatika yang <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#818CF8] to-[#38BDF8]">Inovatif</span>, Kolaboratif, dan Berdampak
+                    Bangun Generasi <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#818CF8] to-[#38BDF8]">Ilmu Komputer</span> yang Inovatif , Kolaboratif, dan Berdampak
                 </h1>
                 <p class="animate-fade-in-up delay-200 text-base lg:text-lg text-slate-300 font-medium max-w-2xl leading-relaxed mb-10">
                     Website resmi Himpunan Mahasiswa Ilmu Komputer sebagai pusat informasi, publikasi, serta sistem administrasi organisasi yang mendukung kolaborasi, pengembangan kompetensi, dan transparansi seluruh kegiatan kemahasiswaan.

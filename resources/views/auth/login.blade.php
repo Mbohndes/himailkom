@@ -18,7 +18,7 @@
         <div class="hidden lg:flex lg:w-1/2 relative bg-slate-900 overflow-hidden items-center justify-center">
             <!-- Background Image -->
             <div class="absolute inset-0 w-full h-full">
-                <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="HIMA Ilkom" class="w-full h-full object-cover opacity-50">
+                <img src="ilkom.jpeg" alt="HIMA Ilkom" class="w-full h-full object-cover opacity-50">
             </div>
             <!-- Gradient Overlay -->
             <div class="absolute inset-0 bg-gradient-to-br from-[#5442F5]/90 to-slate-900/90 backdrop-blur-[2px]"></div>
