@@ -17,8 +17,7 @@
         <!-- KOLOM KIRI (Visual & Branding) - Gambar dibedakan sedikit -->
         <div class="hidden lg:flex lg:w-1/2 relative bg-slate-900 overflow-hidden items-center justify-center order-2">
             <div class="absolute inset-0 w-full h-full">
-                <!-- Foto kegiatan / kebersamaan -->
-                <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="HIMA Ilkom" class="w-full h-full object-cover opacity-40">
+                <img src="ilkom.jpeg" alt="HIMA Ilkom" class="w-full h-full object-cover opacity-50">
             </div>
             <!-- Gradient Overlay (Warna lebih kebiruan) -->
             <div class="absolute inset-0 bg-gradient-to-bl from-[#38BDF8]/80 to-[#5442F5]/90 backdrop-blur-[2px]"></div>
