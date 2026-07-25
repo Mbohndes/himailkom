@@ -28,76 +28,107 @@
 <body class="antialiased selection:bg-[#5442F5] selection:text-white" x-data="{ mobileMenuOpen: false, scrolled: false }" @scroll.window="scrolled = (window.pageYOffset > 50)">
 
     <nav :class="{'bg-white/90 backdrop-blur-md border-b border-slate-200 shadow-sm text-slate-800': scrolled, 'bg-transparent text-white border-b border-white/10': !scrolled}" 
-         class="fixed w-full z-50 top-0 transition-all duration-500">
-        <div class="max-w-[1400px] mx-auto px-6 lg:px-12 py-4 flex items-center justify-between">
-            <a href="#" class="flex items-center gap-3 group">
-                <img src="<?php echo e(asset('logo.png')); ?>" onerror="this.outerHTML='<div class=\'w-14 h-14 bg-gradient-to-br from-[#5442F5] to-[#8066FF] rounded-xl flex items-center justify-center text-white font-black text-xl shadow-lg\'>H</div>'" alt="Logo HIMA" class="w-14 h-14 object-contain group-hover:scale-110 transition-transform duration-300">
-                <span class="font-extrabold text-xl tracking-tight transition-colors">HIMA <span class="text-[#5442F5]">ILMU KOMPUTER</span></span>
-            </a>
-            <div class="hidden lg:flex items-center gap-8 text-sm font-semibold">
-                <a href="#beranda" class="hover:text-[#5442F5] transition-colors">Beranda</a>
-                <a href="#tentang" class="hover:text-[#5442F5] transition-colors">Tentang Kami</a>
-                <a href="#berita" class="hover:text-[#5442F5] transition-colors">Berita</a>
-                <a href="#faq" class="hover:text-[#5442F5] transition-colors">FAQ</a>
-                <a href="#kontak" class="hover:text-[#5442F5] transition-colors">Kontak</a>
-            </div>
-            <div class="hidden lg:flex items-center gap-3">
-                <?php if(auth()->guard()->guest()): ?>
-                    <a href="<?php echo e(route('login')); ?>" :class="{'bg-slate-100 text-slate-700 hover:bg-slate-200': scrolled, 'bg-white/10 text-white hover:bg-white/20 backdrop-blur-sm': !scrolled}" class="px-5 py-2.5 text-sm font-bold rounded-full transition-all border border-transparent">Masuk</a>
-                    <a href="<?php echo e(route('register')); ?>" class="px-5 py-2.5 bg-[#5442F5] hover:bg-[#4331e5] text-white text-sm font-bold rounded-full transition-all shadow-lg shadow-[#5442F5]/30">Daftar</a>
-                <?php endif; ?>
-                <?php if(auth()->guard()->check()): ?>
-                    <a href="<?php echo e(route('superadmin.dashboard')); ?>" class="px-6 py-2.5 bg-[#5442F5] hover:bg-[#4331e5] text-white text-sm font-bold rounded-full transition-all shadow-lg shadow-[#5442F5]/30 flex items-center gap-2"><span>👋</span> Dashboard</a>
-                <?php endif; ?>
-            </div>
-            <button @click="mobileMenuOpen = !mobileMenuOpen" class="lg:hidden p-2 rounded-full transition-colors" :class="{'bg-slate-100 text-slate-800': scrolled, 'bg-white/10 text-white': !scrolled}">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-            </button>
+     class="fixed w-full z-50 top-0 transition-all duration-500">
+    <div class="max-w-[1400px] mx-auto px-6 lg:px-12 py-4 flex items-center justify-between">
+        <a href="#" class="flex items-center gap-3 group">
+            <img src="<?php echo e(asset('logo.png')); ?>" onerror="this.outerHTML='<div class=\'w-14 h-14 bg-gradient-to-br from-[#5442F5] to-[#8066FF] rounded-xl flex items-center justify-center text-white font-black text-xl shadow-lg\'>H</div>'" alt="Logo HIMA" class="w-14 h-14 object-contain group-hover:scale-110 transition-transform duration-300">
+            <span class="font-extrabold text-xl tracking-tight transition-colors">HIMA <span class="text-[#5442F5]">ILMU KOMPUTER</span></span>
+        </a>
+        
+        <!-- Menu Tampilan Laptop -->
+        <div class="hidden lg:flex items-center gap-8 text-sm font-semibold">
+            <a href="#beranda" class="hover:text-[#5442F5] transition-colors">Beranda</a>
+            <a href="#tentang" class="hover:text-[#5442F5] transition-colors">Tentang Kami</a>
+            <a href="#berita" class="hover:text-[#5442F5] transition-colors">Berita</a>
+            <a href="#faq" class="hover:text-[#5442F5] transition-colors">FAQ</a>
+            <a href="#kontak" class="hover:text-[#5442F5] transition-colors">Kontak</a>
         </div>
-
-        <div x-show="mobileMenuOpen" x-transition class="lg:hidden absolute top-full left-0 w-full bg-white border-b border-slate-100 shadow-xl py-4 px-6 flex flex-col gap-4 text-sm font-bold text-slate-800">
-            <a href="#beranda" @click="mobileMenuOpen = false" class="hover:text-[#5442F5]">Beranda</a>
-            <a href="#tentang" @click="mobileMenuOpen = false" class="hover:text-[#5442F5]">Tentang Kami</a>
-            <hr class="border-slate-100">
+        
+        <div class="hidden lg:flex items-center gap-3">
             <?php if(auth()->guard()->guest()): ?>
-                <a href="<?php echo e(route('login')); ?>" class="text-center px-6 py-3 bg-slate-100 rounded-full">Masuk</a>
-                <a href="<?php echo e(route('register')); ?>" class="text-center px-6 py-3 bg-[#5442F5] text-white rounded-full">Daftar</a>
+                <a href="<?php echo e(route('login')); ?>" :class="{'bg-slate-100 text-slate-700 hover:bg-slate-200': scrolled, 'bg-white/10 text-white hover:bg-white/20 backdrop-blur-sm': !scrolled}" class="px-5 py-2.5 text-sm font-bold rounded-full transition-all border border-transparent">Masuk</a>
+                <a href="<?php echo e(route('register')); ?>" class="px-5 py-2.5 bg-[#5442F5] hover:bg-[#4331e5] text-white text-sm font-bold rounded-full transition-all shadow-lg shadow-[#5442F5]/30">Daftar</a>
             <?php endif; ?>
             <?php if(auth()->guard()->check()): ?>
-                <a href="<?php echo e(route('superadmin.dashboard')); ?>" class="text-center px-6 py-3 bg-[#5442F5] text-white rounded-full">Ke Dashboard</a>
+                <a href="<?php echo e(route('superadmin.dashboard')); ?>" class="px-6 py-2.5 bg-[#5442F5] hover:bg-[#4331e5] text-white text-sm font-bold rounded-full transition-all shadow-lg shadow-[#5442F5]/30 flex items-center gap-2"><span>👋</span> Dashboard</a>
             <?php endif; ?>
         </div>
-    </nav>
+        
+        <!-- Tombol Hamburger Mobile -->
+        <button @click="mobileMenuOpen = !mobileMenuOpen" class="lg:hidden p-2 rounded-full transition-colors" :class="{'bg-slate-100 text-slate-800': scrolled, 'bg-white/10 text-white': !scrolled}">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+        </button>
+    </div>
+
+    <!-- Menu Tampilan HP (Mobile Menu) -->
+    <div x-show="mobileMenuOpen" x-transition class="lg:hidden absolute top-full left-0 w-full bg-white border-b border-slate-100 shadow-xl py-4 px-6 flex flex-col gap-4 text-sm font-bold text-slate-800">
+        <a href="#beranda" @click="mobileMenuOpen = false" class="hover:text-[#5442F5]">Beranda</a>
+        <a href="#tentang" @click="mobileMenuOpen = false" class="hover:text-[#5442F5]">Tentang Kami</a>
+        
+        <!-- Menambahkan menu yang kurang di sini -->
+        <a href="#berita" @click="mobileMenuOpen = false" class="hover:text-[#5442F5]">Berita</a>
+        <a href="#faq" @click="mobileMenuOpen = false" class="hover:text-[#5442F5]">FAQ</a>
+        <a href="#kontak" @click="mobileMenuOpen = false" class="hover:text-[#5442F5]">Kontak</a>
+        
+        <hr class="border-slate-100">
+        
+        <?php if(auth()->guard()->guest()): ?>
+            <a href="<?php echo e(route('login')); ?>" class="text-center px-6 py-3 bg-slate-100 rounded-full">Masuk</a>
+            <a href="<?php echo e(route('register')); ?>" class="text-center px-6 py-3 bg-[#5442F5] text-white rounded-full">Daftar</a>
+        <?php endif; ?>
+        <?php if(auth()->guard()->check()): ?>
+            <a href="<?php echo e(route('superadmin.dashboard')); ?>" class="text-center px-6 py-3 bg-[#5442F5] text-white rounded-full">Ke Dashboard</a>
+        <?php endif; ?>
+    </div>
+</nav>
 
     <section id="beranda" class="relative w-full h-screen min-h-[700px] flex items-center justify-start overflow-hidden bg-slate-900">
+        
+        <!-- 1. BAGIAN GAMBAR -->
         <div class="absolute inset-0 w-full h-full">
-            <img src="hima.png" alt="Kegiatan HIMA" class="w-full h-full object-cover opacity-80">
+            <!-- object-[80%_center] akan memaksa fokus gambar ditarik ke kanan (ke arah anggota) saat di HP -->
+            <img src="hima.png" alt="Kegiatan HIMA" class="w-full h-full object-cover object-[80%_center] lg:object-right opacity-100 lg:opacity-80">
         </div>
-        <div class="absolute inset-0 bg-gradient-to-r from-slate-900/95 via-slate-900/70 "></div>
+        
+        <!-- 2. BAGIAN OVERLAY GELAP -->
+        <!-- Di HP dibuat gelap merata (bg-slate-900/80) agar teks terbaca, di Desktop berupa gradient memudar ke kanan -->
+        <div class="absolute inset-0 bg-slate-900/80 lg:bg-slate-900/0 lg:bg-gradient-to-r lg:from-slate-900/95 lg:via-slate-900/70 lg:to-transparent"></div>
 
+        <!-- 3. BAGIAN KONTEN TEKS & TOMBOL -->
         <div class="relative z-10 w-full max-w-[1400px] mx-auto px-6 lg:px-12 flex">
-            <div class="w-full lg:w-[65%] flex flex-col justify-center">
-                <div class="animate-fade-in-up inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md border border-white/20 text-indigo-100 text-sm font-semibold rounded-full w-fit mb-6">
-                    <span class="text-base">🏛</span> Himpunan Mahasiswa Ilmu Komputer
-                </div>
+            <div class="w-full lg:w-[65%] flex flex-col justify-center text-center lg:text-left items-center lg:items-start">
+                
+                
                 <h1 class="animate-fade-in-up delay-100 text-4xl sm:text-5xl lg:text-[4.5rem] font-extrabold text-white leading-[1.1] tracking-tight mb-6">
-                    Bangun Generasi <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#818CF8] to-[#38BDF8]">Ilmu Komputer</span> yang Inovatif , Kolaboratif, dan Berdampak
+                    Bangun Generasi <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#818CF8] to-[#38BDF8]">Ilmu Komputer</span> yang Inovatif, Kolaboratif, dan Berdampak
                 </h1>
+                
                 <p class="animate-fade-in-up delay-200 text-base lg:text-lg text-slate-300 font-medium max-w-2xl leading-relaxed mb-10">
                     Website resmi Himpunan Mahasiswa Ilmu Komputer sebagai pusat informasi, publikasi, serta sistem administrasi organisasi yang mendukung kolaborasi, pengembangan kompetensi, dan transparansi seluruh kegiatan kemahasiswaan.
                 </p>
-                <div class="animate-fade-in-up delay-300 flex flex-col sm:flex-row items-center gap-4">
+                
+                <div class="animate-fade-in-up delay-300 flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto px-4 lg:px-0">
                     <a href="<?php echo e(route('login')); ?>" class="w-full sm:w-auto text-center px-8 py-4 bg-[#5442F5] hover:bg-[#4331e5] text-white text-[15px] font-bold rounded-full transition-all shadow-lg">Masuk ke SIM HIMA</a>
                     <a href="#tentang" class="w-full sm:w-auto text-center px-8 py-4 bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 text-white text-[15px] font-bold rounded-full transition-all">Pelajari Tentang HIMA</a>
                 </div>
+
             </div>
         </div>
-        <a href="#tentang" class="animate-fade-in-up delay-400 absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/60 hover:text-white transition-colors cursor-pointer group">
-            <span class="text-[10px] font-bold uppercase tracking-[0.2em]">Scroll Ke Bawah</span>
-            <div class="w-8 h-8 rounded-full border border-white/30 flex items-center justify-center group-hover:border-white transition-colors animate-bounce">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
-            </div>
-        </a>
+        
+        <!-- 4. TOMBOL SCROLL BAWAH -->
+       <!-- Bungkus luar (Wrapper) khusus untuk menengahkan posisi -->
+        <div class="absolute bottom-8 left-0 w-full flex justify-center z-20">
+            
+            <!-- Tombol asli dan animasinya dipindah ke dalam sini -->
+            <a href="#tentang" class="animate-fade-in-up delay-400 flex flex-col items-center gap-2 text-white/60 hover:text-white transition-colors cursor-pointer group">
+                <!-- Tambahan ml-[0.2em] agar teks benar-benar rata tengah mengimbangi tracking (spasi huruf) -->
+                <span class="text-[10px] font-bold uppercase tracking-[0.2em] ml-[0.2em]">Scroll Ke Bawah</span>
+                <div class="w-8 h-8 rounded-full border border-white/30 flex items-center justify-center group-hover:border-white transition-colors animate-bounce">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+                </div>
+            </a>
+            
+        </div>
     </section>
 
     <!-- ========================================== -->
@@ -106,29 +137,53 @@
     <section id="tentang" class="bg-white rounded-t-[40px] lg:rounded-t-[64px] -mt-8 relative z-20 pt-16 pb-16 px-4 sm:px-6 lg:px-12">
         <div class="max-w-[1200px] mx-auto">
             
-            <!-- A. PROFIL SINGKAT -->
-            <div class="flex flex-col lg:flex-row items-center gap-8 lg:gap-12 mb-20">
-                <!-- Gambar (Diperkecil Tinggi & Radiusnya) -->
-                <div class="w-full lg:w-5/12 h-[280px] lg:h-[350px] rounded-[32px] overflow-hidden relative shadow-xl shadow-slate-200">
-                    <img src="ilkom.jpeg" alt="Kegiatan HIMA" class="w-full h-full object-cover">
-                    <div class="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full font-bold text-[#5442F5] text-xs shadow-md">
-                        
-                    </div>
-                </div>
+    <!-- A. PROFIL SINGKAT -->
+    <div class="flex flex-col lg:flex-row items-center gap-10 lg:gap-16 mb-20 px-4 sm:px-0">
+        
+        <!-- Bagian Gambar (Modern dengan efek Hover & Shadow) -->
+        <div class="w-full lg:w-5/12 relative group">
+            <!-- Ornamen dekorasi glowing di belakang gambar -->
+            <div class="absolute -inset-4 bg-gradient-to-r from-[#5442F5] to-sky-400 rounded-[2.5rem] opacity-20 group-hover:opacity-40 blur-lg transition duration-500"></div>
+            
+            <div class="relative h-[320px] lg:h-[400px] rounded-[2rem] overflow-hidden shadow-2xl shadow-slate-200 border-4 border-white">
+                <!-- Efek zoom in pelan saat cursor diarahkan ke gambar -->
+                <img src="ilkom.jpeg" alt="Kegiatan HIMA" class="w-full h-full object-cover hover:scale-105 transition-transform duration-700">
                 
-                <!-- Teks Deskripsi (Font & Margin Disesuaikan) -->
-                <div class="w-full lg:w-7/12">
-                    <h2 class="text-3xl lg:text-4xl font-extrabold text-slate-800 leading-tight mb-4 tracking-tight uppercase">
-                        RUANG KOLABORASI <br> <span class="text-slate-400 font-medium">MAHASISWA</span> ILKOM.
-                    </h2>
-                    <p class="text-sm lg:text-base text-slate-500 font-medium leading-relaxed mb-6">
-                        Himpunan Mahasiswa Ilmu Komputer (HIMA Ilkom) adalah wadah bagi mahasiswa untuk mengembangkan potensi akademik, kepemimpinan, dan soft skill. Kami hadir untuk menjembatani aspirasi mahasiswa dengan program studi, serta menciptakan inovasi teknologi.
-                    </p>
-                    <a href="#" class="inline-flex items-center gap-2 px-6 py-3 bg-slate-900 hover:bg-[#5442F5] text-white text-sm font-bold rounded-full transition-all shadow-md">
-                        Pelajari Sejarah Kami <span>&rarr;</span>
-                    </a>
+                <!-- Badge yang tadinya kosong saya isi dengan identitas keren -->
+                <div class="absolute bottom-5 left-5 bg-white/95 backdrop-blur-sm px-5 py-2.5 rounded-2xl font-black text-[#5442F5] text-xs shadow-xl flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                    HIMA ILKOM UMKU
                 </div>
             </div>
+        </div>
+        
+        <!-- Bagian Teks Deskripsi (Tipografi Modern) -->
+        <div class="w-full lg:w-7/12 flex flex-col justify-center">
+            
+            <!-- Label Kecil -->
+            <div class="inline-flex items-center gap-2 px-4 py-2 bg-indigo-50 text-[#5442F5] text-[10px] font-bold uppercase tracking-widest rounded-full w-fit mb-5">
+                Tentang Himpunan
+            </div>
+            
+            <h2 class="text-3xl lg:text-5xl font-extrabold text-slate-800 leading-[1.2] tracking-tight mb-6">
+                Ruang Kolaborasi <br> 
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#5442F5] to-sky-500">Mahasiswa Ilkom.</span>
+            </h2>
+            
+            <!-- Paragraf dipecah agar lebih enak dibaca dan terlihat estetik -->
+            <p class="text-base lg:text-lg text-slate-500 font-medium leading-relaxed mb-6">
+                Himpunan Mahasiswa Ilmu Komputer (HIMA Ilkom) adalah wadah bagi mahasiswa untuk mengembangkan potensi akademik, kepemimpinan, dan <span class="text-slate-700 font-bold italic">soft skill</span>.
+            </p>
+            
+            <!-- Paragraf kedua diberi garis pinggir (border) sebagai penekanan -->
+            <p class="text-base lg:text-lg text-slate-600 font-medium leading-relaxed border-l-4 border-[#5442F5] pl-5 py-1">
+                Kami hadir untuk menjembatani aspirasi mahasiswa dengan program studi, serta berkolaborasi untuk menciptakan inovasi teknologi yang berdampak positif.
+            </p>
+            
+        </div>
+    </div>
+    
+</div>
 
             <!-- B. VISI & MISI (Card Diperkecil) -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-20">
@@ -413,8 +468,8 @@
 
                         </p>
                         
-                        <!-- Tombol Baca -->
-                        <a href="<?php echo e(route('superadmin.news.show', $news->slug ?? $news->id)); ?>" class="mt-auto px-5 py-2.5 bg-slate-50 hover:bg-[#5442F5] hover:text-white text-[#5442F5] font-bold text-xs rounded-full transition-all w-fit flex items-center gap-2">
+                        <!-- PERBAIKAN: Tombol Baca mengarah ke URL publik -->
+                        <a href="<?php echo e(url('/berita/' . ($news->slug ?? $news->id))); ?>" class="mt-auto px-5 py-2.5 bg-slate-50 hover:bg-[#5442F5] hover:text-white text-[#5442F5] font-bold text-xs rounded-full transition-all w-fit flex items-center gap-2">
                             Baca Selengkapnya <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                         </a>
                     </div>
@@ -428,8 +483,8 @@
         </div>
 
         <div class="text-center">
-            <!-- Asumsi route index publik (bukan superadmin) ada. Jika belum, biarkan '#' -->
-            <a href="#" class="inline-flex items-center gap-2 px-8 py-4 bg-white border border-slate-200 hover:border-[#5442F5] text-slate-700 hover:text-[#5442F5] text-sm font-bold rounded-full transition-all shadow-sm">
+            <!-- PERBAIKAN: Tombol Lihat Semua mengarah ke halaman indeks berita -->
+            <a href="<?php echo e(url('/berita')); ?>" class="inline-flex items-center gap-2 px-8 py-4 bg-white border border-slate-200 hover:border-[#5442F5] text-slate-700 hover:text-[#5442F5] text-sm font-bold rounded-full transition-all shadow-sm">
                 Lihat Semua Berita <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m-7-7H3"></path></svg>
             </a>
         </div>

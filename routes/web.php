@@ -14,6 +14,7 @@ use App\Http\Controllers\SuperAdmin\NewsCategoryController;
 use App\Http\Controllers\SuperAdmin\NewsTagController;
 use App\Http\Controllers\SuperAdmin\DueController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PublicNewsController;
 
 // Rute untuk akun yang belum diverifikasi
 Route::get('/pending-verification', function () {
@@ -260,3 +261,7 @@ Route::get('/cek-api', function () {
 });
 // 5. Route Otentikasi bawaan Breeze (Login, Register, dll) INI YANG PALING PENTING
 require __DIR__.'/auth.php';
+
+// Jalur akses publik untuk berita
+Route::get('/berita', [PublicNewsController::class, 'index']);
+Route::get('/berita/{id}', [PublicNewsController::class, 'show']);
