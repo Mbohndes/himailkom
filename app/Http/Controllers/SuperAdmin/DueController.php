@@ -195,6 +195,7 @@ class DueController extends Controller
     }
 
     // Fungsi untuk melunasi / membatalkan iuran pengurus secara manual oleh bendahara
+    // Fungsi untuk melunasi / membatalkan iuran pengurus secara manual oleh bendahara
     public function verifyPayment(Request $request, \App\Models\DuePayment $payment)
     {
         // PENGAMANAN: Cegah Anggota atau Kadiv
@@ -214,16 +215,21 @@ class DueController extends Controller
             return redirect()->back()->with('success', 'Pembayaran iuran ' . $payment->user->name . ' telah dibatalkan (Kembali Belum Lunas)!');
         }
 
-        // LOGIKA PENGESAHAN LUNAS NORMAL
-        $dueAmount = $payment->due->amount;
+        // VALIDASI INPUT DARI MODAL POP-UP
+        $request->validate([
+            'amount_paid' => 'required|numeric|min:0',
+            'notes' => 'nullable|string'
+        ]);
+
+        // LOGIKA PENGESAHAN LUNAS DENGAN DENDA / NOMINAL KUSTOM
         $payment->update([
-            'amount_paid' => $dueAmount,
+            'amount_paid' => $request->amount_paid, // Mengambil dari ketikan Bendahara di Modal
             'status' => 'Lunas',
             'payment_method' => 'Cash/Manual',
             'paid_at' => now(),
-            'notes' => 'Dilunasi manual oleh Bendahara'
+            'notes' => $request->notes ?? 'Dilunasi manual oleh Bendahara' // Mengambil catatan jika ada
         ]);
 
-        return redirect()->back()->with('success', 'Pembayaran iuran ' . $payment->user->name . ' telah disahkan LUNAS!');
+        return redirect()->back()->with('success', 'Pembayaran iuran ' . $payment->user->name . ' telah disahkan dengan nominal Rp ' . number_format($request->amount_paid, 0, ',', '.') . '!');
     }
 }

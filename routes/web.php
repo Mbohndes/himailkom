@@ -19,7 +19,7 @@ use App\Http\Controllers\PublicNewsController;
 // Rute untuk akun yang belum diverifikasi
 Route::get('/pending-verification', function () {
     return view('auth.pending');
-})->middleware(['auth'])->name('verification.pending');
+})->name('verification.pending');
 
 // 1. Route Halaman Utama (Welcome)
 Route::get('/', function () {

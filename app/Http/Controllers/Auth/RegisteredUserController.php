@@ -3,14 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\MemberApplication;
 use App\Models\User;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules\Password; // Diubah agar lebih ringkas
-use Illuminate\Validation\ValidationException;
+use Illuminate\Validation\Rules\Password;
 use Illuminate\View\View;
 
 class RegisteredUserController extends Controller
@@ -25,17 +22,18 @@ class RegisteredUserController extends Controller
 
     /**
      * Handle an incoming registration request.
-     *
-     * @throws ValidationException
      */
     public function store(Request $request): RedirectResponse
     {
+        // 1. Validasi Input
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'nim' => ['required', 'string', 'max:25', 'unique:'.User::class], // Validasi NIM unik
+            // Pastikan NIM belum ada di tabel users maupun member_applications
+            'nim' => ['required', 'string', 'max:25', 'unique:users,nim', 'unique:member_applications,nim'], 
             'email' => [
                 'required', 'string', 'lowercase', 'email', 'max:255',
-                'unique:'.User::class,
+                'unique:users,email',
+                'unique:member_applications,email',
                 // Validasi kustom: HANYA izinkan email kampus
                 function ($attribute, $value, $fail) {
                     if (!str_ends_with($value, '@student.umku.ac.id')) {
@@ -43,25 +41,25 @@ class RegisteredUserController extends Controller
                     }
                 },
             ],
-            'password' => ['required', 'confirmed', \Illuminate\Validation\Rules\Password::defaults()],
+            'password' => ['required', 'confirmed', Password::defaults()],
         ]);
 
-        $user = User::create([
+        // 2. MASUKKAN KE RUANG KARANTINA (Tabel member_applications)
+        MemberApplication::create([
             'name' => $request->name,
-            'nim' => $request->nim, // Simpan NIM
+            'nim' => $request->nim,
             'email' => $request->email,
-            'password' => \Illuminate\Support\Facades\Hash::make($request->password),
-            'status' => 'Nonaktif', // Status awal dibekukan
+            // Jika di form register tidak ada input ini, kita set default null atau string kosong
+            'study_program' => $request->study_program ?? 'Ilmu Komputer', 
+            'cohort' => $request->cohort ?? date('Y'),
+            'phone' => $request->phone ?? '-',
+            'status' => 'Menunggu Verifikasi', // Status karantina
         ]);
 
-        // Catatan: KITA TIDAK MEMBERIKAN ROLE DI SINI.
-        // Artinya akun ini berstatus "Pending Verification"
+        // Catatan: KITA TIDAK MELAKUKAN Auth::login($user) DI SINI
+        // Karena akun User-nya belum benar-benar dibuat (menunggu acc Admin HIMA)
 
-        event(new \Illuminate\Auth\Events\Registered($user));
-
-        \Illuminate\Support\Facades\Auth::login($user);
-
-        // Lempar ke halaman ruang tunggu
-        return redirect()->route('verification.pending');
+        // 3. Lempar kembali ke halaman Login dengan pesan sukses
+        return redirect()->route('verification.pending')->with('status', 'Data pendaftaran berhasil masuk ruang karantina! Silakan tunggu ACC dari Admin.');
     }
 }

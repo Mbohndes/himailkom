@@ -59,6 +59,43 @@ class UserController extends Controller
         // 2. Update Role (Spatie Permission)
         $user->syncRoles([$request->role]);
 
+        // -------------------------------------------------------------
+        // 3. OTOMATISASI TAGIHAN KAS 
+        // -------------------------------------------------------------
+        // Hanya eksekusi jika status akun diset ke "Aktif"
+        if ($request->status === 'Aktif') {
+            // Ambil SEMUA master tagihan (karena tidak ada kolom status di tabel dues)
+            $activeDues = \App\Models\Due::all();
+
+            if ($activeDues->count() > 0) {
+                $payments = [];
+                
+                foreach ($activeDues as $due) {
+                    // CEK DUPLIKAT: Menggunakan model DuePayment
+                    $paymentExists = \App\Models\DuePayment::where('due_id', $due->id)
+                                                        ->where('user_id', $user->id)
+                                                        ->exists();
+
+                    if (!$paymentExists) {
+                        $payments[] = [
+                            'due_id' => $due->id,
+                            'user_id' => $user->id,
+                            'amount_paid' => 0,
+                            'status' => 'Belum Lunas',
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ];
+                    }
+                }
+
+                // Jika array $payments ada isinya, baru masukkan ke database
+                if (count($payments) > 0) {
+                    \App\Models\DuePayment::insert($payments);
+                }
+            }
+        }
+        // -------------------------------------------------------------
+
         return redirect()->back()->with('success', 'Data akun ' . $user->name . ' berhasil diperbarui beserta hak aksesnya!');
     }
 
