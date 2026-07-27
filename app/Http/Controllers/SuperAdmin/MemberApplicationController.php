@@ -89,9 +89,17 @@ class MemberApplicationController extends Controller
             DB::commit();
             return redirect()->back()->with('success', 'Aksi status pendaftaran berhasil diperbarui!');
             
-        } catch (\Exception $e) {
+       } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->back()->with('error', 'Gagal memproses aksi keanggotaan.');
+            
+            // JANGAN DI-REDIRECT DULU, TAMPILKAN ERROR ASLINYA KE LAYAR!
+            dd([
+                'Pesan Error' => $e->getMessage(),
+                'Di File' => $e->getFile(),
+                'Baris Ke' => $e->getLine()
+            ]);
+            
+            // return redirect()->back()->with('error', 'Gagal memproses aksi keanggotaan.');
         }
     }
 }
