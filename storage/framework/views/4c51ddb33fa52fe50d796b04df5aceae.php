@@ -102,10 +102,23 @@
 
             <form :action="actionUrl" method="POST" class="space-y-4" x-data="{ choice: 'Terima' }">
                 <?php echo csrf_field(); ?>
+                
+                <!-- PENAMPIL ERROR (Agar form tidak diam saja jika ada salah) -->
+                <?php if($errors->any()): ?>
+                    <div class="mb-4 bg-red-50 text-red-600 text-xs font-bold p-3 rounded-xl border border-red-100">
+                        <ul class="list-disc pl-4">
+                            <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <li><?php echo e($error); ?></li>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        </ul>
+                    </div>
+                <?php endif; ?>
+
                 <div>
                     <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Tentukan Keputusan</label>
                     <select name="action_type" x-model="choice" class="w-full bg-[#F4F7FE] border-none text-sm font-bold text-slate-700 rounded-xl px-4 py-2.5">
-                        <option value="Terma">Terima (Disetujui & Tempatkan)</option>
+                        <!-- TYPO "Terma" SUDAH DIPERBAIKI MENJADI "Terima" DI SINI -->
+                        <option value="Terima">Terima (Disetujui & Tempatkan)</option>
                         <option value="Revisi">Minta Perlu Revisi Data</option>
                         <option value="Tolak">Tolak Pendaftaran</option>
                     </select>
@@ -133,8 +146,11 @@
                     <div>
                         <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Tentukan Peran (Role)</label>
                         <select name="assigned_role" class="w-full bg-[#F4F7FE] border-none text-sm font-medium text-slate-700 rounded-xl px-4 py-2.5">
-                            <option value="Pengurus">Pengurus HIMA</option>
+                            <!-- VALUE SUDAH DISAMAKAN PERSIS DENGAN DATABASE ANDA -->
                             <option value="Anggota">Anggota Biasa</option>
+                            <option value="Pengurus">Pengurus HIMA</option>
+                            <option value="Kepala Divisi">Kepala Divisi</option>
+                            <option value="BPH">Pengurus Inti (BPH)</option>
                         </select>
                     </div>
                 </div>
