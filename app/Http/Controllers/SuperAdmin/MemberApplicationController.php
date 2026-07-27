@@ -9,6 +9,7 @@ use App\Models\Division;
 use App\Models\Period;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class MemberApplicationController extends Controller
 {
