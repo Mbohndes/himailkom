@@ -9,8 +9,15 @@
         <p class="text-sm font-medium text-slate-400 mt-1">Validasi data pengajuan calon anggota baru dan tentukan penempatan divisi organisasi.</p>
     </div>
 
-    @if(session('success'))
-        <div class="bg-emerald-50 border border-emerald-200 text-emerald-600 px-4 py-3 rounded-xl text-sm font-medium shadow-sm">{{ session('success') }}</div>
+    @if($errors->any())
+        <div class="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl text-sm font-medium shadow-sm mb-4">
+            <p class="font-bold mb-1">Pendaftaran Gagal Diproses:</p>
+            <ul class="list-disc pl-5">
+                @foreach($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
     @endif
 
     <form action="{{ route('superadmin.membership.applications.index') }}" method="GET" class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex flex-col sm:flex-row gap-3">
