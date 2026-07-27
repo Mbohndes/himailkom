@@ -106,69 +106,62 @@
                 <div><span class="font-bold text-slate-400">NIM / Email:</span> <span x-text="currentApp.nim"></span> / <span x-text="currentApp.email"></span></div>
             </div>
 
-            <form :action="actionUrl" method="POST" class="space-y-4" x-data="{ choice: 'Terima' }">
+           <!-- x-data DIPINDAHKAN KE DALAM DIV AGAR TIDAK BENTROK -->
+            <form :action="actionUrl" method="POST">
                 @csrf
                 
-                <!-- PENAMPIL ERROR (Agar form tidak diam saja jika ada salah) -->
-                @if($errors->any())
-                    <div class="mb-4 bg-red-50 text-red-600 text-xs font-bold p-3 rounded-xl border border-red-100">
-                        <ul class="list-disc pl-4">
-                            @foreach($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
-
-                <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Tentukan Keputusan</label>
-                    <select name="action_type" x-model="choice" class="w-full bg-[#F4F7FE] border-none text-sm font-bold text-slate-700 rounded-xl px-4 py-2.5">
-                        <!-- TYPO "Terma" SUDAH DIPERBAIKI MENJADI "Terima" DI SINI -->
-                        <option value="Terima">Terima (Disetujui & Tempatkan)</option>
-                        <option value="Revisi">Minta Perlu Revisi Data</option>
-                        <option value="Tolak">Tolak Pendaftaran</option>
-                    </select>
-                </div>
-
-                <div x-show="choice === 'Terima'" class="space-y-4 pt-2 border-t border-slate-100">
+                <div class="space-y-4" x-data="{ choice: 'Terima' }">
                     <div>
-                        <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Tempatkan ke Divisi</label>
-                        <select name="division_id" class="w-full bg-[#F4F7FE] border-none text-sm font-medium text-slate-700 rounded-xl px-4 py-2.5">
-                            @foreach($divisions as $div)
-                                <option value="{{ $div->id }}">{{ $div->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Tentukan Periode Jabatan</label>
-                        <select name="period_id" class="w-full bg-[#F4F7FE] border-none text-sm font-medium text-slate-700 rounded-xl px-4 py-2.5">
-                            @foreach($periods as $per)
-                                <option value="{{ $per->id }}">{{ $per->name }}</option>
-                            @endforeach
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Tentukan Keputusan</label>
+                        <select name="action_type" x-model="choice" class="w-full bg-[#F4F7FE] border-none text-sm font-bold text-slate-700 rounded-xl px-4 py-2.5">
+                            <option value="Terima">Terima (Disetujui & Tempatkan)</option>
+                            <option value="Revisi">Minta Perlu Revisi Data</option>
+                            <option value="Tolak">Tolak Pendaftaran</option>
                         </select>
                     </div>
 
-                    <div>
-                        <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Tentukan Peran (Role)</label>
-                        <select name="assigned_role" class="w-full bg-[#F4F7FE] border-none text-sm font-medium text-slate-700 rounded-xl px-4 py-2.5">
-                            <!-- VALUE SUDAH DISAMAKAN PERSIS DENGAN DATABASE ANDA -->
-                            <option value="Anggota">Anggota Biasa</option>
-                            <option value="Pengurus">Pengurus HIMA</option>
-                            <option value="Kepala Divisi">Kepala Divisi</option>
-                            <option value="BPH">Pengurus Inti (BPH)</option>
-                        </select>
+                    <div x-show="choice === 'Terima'" class="space-y-4 pt-2 border-t border-slate-100">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Tempatkan ke Divisi</label>
+                            <select name="division_id" class="w-full bg-[#F4F7FE] border-none text-sm font-medium text-slate-700 rounded-xl px-4 py-2.5">
+                                @foreach($divisions as $div)
+                                    <option value="{{ $div->id }}">{{ $div->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Tentukan Periode Jabatan</label>
+                            <select name="period_id" class="w-full bg-[#F4F7FE] border-none text-sm font-medium text-slate-700 rounded-xl px-4 py-2.5">
+                                @foreach($periods as $per)
+                                    <option value="{{ $per->id }}">{{ $per->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Tentukan Peran (Role)</label>
+                            <select name="assigned_role" class="w-full bg-[#F4F7FE] border-none text-sm font-medium text-slate-700 rounded-xl px-4 py-2.5">
+                                <option value="Anggota">Anggota Biasa</option>
+                                <option value="Pengurus">Pengurus HIMA</option>
+                                <option value="Kepala Divisi">Kepala Divisi</option>
+                                <option value="BPH">Pengurus Inti (BPH)</option>
+                            </select>
+                        </div>
                     </div>
-                </div>
 
-                <div x-show="choice !== 'Terima'">
-                    <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Beri Catatan Alasan / Instruksi Revisi</label>
-                    <textarea name="admin_notes" rows="3" placeholder="Contoh: Format NIM salah atau mohon ganti foto..." class="w-full bg-[#F4F7FE] border-none text-sm font-medium text-slate-700 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-red-500"></textarea>
-                </div>
+                    <div x-show="choice !== 'Terima'">
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Beri Catatan Alasan / Instruksi Revisi</label>
+                        <textarea name="admin_notes" rows="3" placeholder="Contoh: Format NIM salah atau mohon ganti foto..." class="w-full bg-[#F4F7FE] border-none text-sm font-medium text-slate-700 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-red-500"></textarea>
+                    </div>
 
-                <button type="submit" class="w-full py-3 bg-[#5442F5] hover:bg-[#4331e5] text-white text-sm font-extrabold rounded-xl shadow-md transition-colors">
-                    Sahkan Keputusan
-                </button>
+                    <!-- Text bantuan untuk memastikan Target URL masuk -->
+                    <p class="text-[11px] text-slate-400 font-medium text-center">Menuju Target URL: <span x-text="actionUrl"></span></p>
+
+                    <button type="submit" class="w-full py-3 bg-[#5442F5] hover:bg-[#4331e5] text-white text-sm font-extrabold rounded-xl shadow-md transition-colors">
+                        Sahkan Keputusan
+                    </button>
+                </div>
             </form>
         </div>
     </div>

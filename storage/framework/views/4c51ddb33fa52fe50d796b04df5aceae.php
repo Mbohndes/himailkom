@@ -9,8 +9,15 @@
         <p class="text-sm font-medium text-slate-400 mt-1">Validasi data pengajuan calon anggota baru dan tentukan penempatan divisi organisasi.</p>
     </div>
 
-    <?php if(session('success')): ?>
-        <div class="bg-emerald-50 border border-emerald-200 text-emerald-600 px-4 py-3 rounded-xl text-sm font-medium shadow-sm"><?php echo e(session('success')); ?></div>
+    <?php if($errors->any()): ?>
+        <div class="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl text-sm font-medium shadow-sm mb-4">
+            <p class="font-bold mb-1">Pendaftaran Gagal Diproses:</p>
+            <ul class="list-disc pl-5">
+                <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <li><?php echo e($error); ?></li>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+            </ul>
+        </div>
     <?php endif; ?>
 
     <form action="<?php echo e(route('superadmin.membership.applications.index')); ?>" method="GET" class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex flex-col sm:flex-row gap-3">
@@ -100,69 +107,62 @@
                 <div><span class="font-bold text-slate-400">NIM / Email:</span> <span x-text="currentApp.nim"></span> / <span x-text="currentApp.email"></span></div>
             </div>
 
-            <form :action="actionUrl" method="POST" class="space-y-4" x-data="{ choice: 'Terima' }">
+           <!-- x-data DIPINDAHKAN KE DALAM DIV AGAR TIDAK BENTROK -->
+            <form :action="actionUrl" method="POST">
                 <?php echo csrf_field(); ?>
                 
-                <!-- PENAMPIL ERROR (Agar form tidak diam saja jika ada salah) -->
-                <?php if($errors->any()): ?>
-                    <div class="mb-4 bg-red-50 text-red-600 text-xs font-bold p-3 rounded-xl border border-red-100">
-                        <ul class="list-disc pl-4">
-                            <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <li><?php echo e($error); ?></li>
-                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                        </ul>
-                    </div>
-                <?php endif; ?>
-
-                <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Tentukan Keputusan</label>
-                    <select name="action_type" x-model="choice" class="w-full bg-[#F4F7FE] border-none text-sm font-bold text-slate-700 rounded-xl px-4 py-2.5">
-                        <!-- TYPO "Terma" SUDAH DIPERBAIKI MENJADI "Terima" DI SINI -->
-                        <option value="Terima">Terima (Disetujui & Tempatkan)</option>
-                        <option value="Revisi">Minta Perlu Revisi Data</option>
-                        <option value="Tolak">Tolak Pendaftaran</option>
-                    </select>
-                </div>
-
-                <div x-show="choice === 'Terima'" class="space-y-4 pt-2 border-t border-slate-100">
+                <div class="space-y-4" x-data="{ choice: 'Terima' }">
                     <div>
-                        <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Tempatkan ke Divisi</label>
-                        <select name="division_id" class="w-full bg-[#F4F7FE] border-none text-sm font-medium text-slate-700 rounded-xl px-4 py-2.5">
-                            <?php $__currentLoopData = $divisions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $div): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <option value="<?php echo e($div->id); ?>"><?php echo e($div->name); ?></option>
-                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                        </select>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Tentukan Periode Jabatan</label>
-                        <select name="period_id" class="w-full bg-[#F4F7FE] border-none text-sm font-medium text-slate-700 rounded-xl px-4 py-2.5">
-                            <?php $__currentLoopData = $periods; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $per): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <option value="<?php echo e($per->id); ?>"><?php echo e($per->name); ?></option>
-                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Tentukan Keputusan</label>
+                        <select name="action_type" x-model="choice" class="w-full bg-[#F4F7FE] border-none text-sm font-bold text-slate-700 rounded-xl px-4 py-2.5">
+                            <option value="Terima">Terima (Disetujui & Tempatkan)</option>
+                            <option value="Revisi">Minta Perlu Revisi Data</option>
+                            <option value="Tolak">Tolak Pendaftaran</option>
                         </select>
                     </div>
 
-                    <div>
-                        <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Tentukan Peran (Role)</label>
-                        <select name="assigned_role" class="w-full bg-[#F4F7FE] border-none text-sm font-medium text-slate-700 rounded-xl px-4 py-2.5">
-                            <!-- VALUE SUDAH DISAMAKAN PERSIS DENGAN DATABASE ANDA -->
-                            <option value="Anggota">Anggota Biasa</option>
-                            <option value="Pengurus">Pengurus HIMA</option>
-                            <option value="Kepala Divisi">Kepala Divisi</option>
-                            <option value="BPH">Pengurus Inti (BPH)</option>
-                        </select>
+                    <div x-show="choice === 'Terima'" class="space-y-4 pt-2 border-t border-slate-100">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Tempatkan ke Divisi</label>
+                            <select name="division_id" class="w-full bg-[#F4F7FE] border-none text-sm font-medium text-slate-700 rounded-xl px-4 py-2.5">
+                                <?php $__currentLoopData = $divisions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $div): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <option value="<?php echo e($div->id); ?>"><?php echo e($div->name); ?></option>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Tentukan Periode Jabatan</label>
+                            <select name="period_id" class="w-full bg-[#F4F7FE] border-none text-sm font-medium text-slate-700 rounded-xl px-4 py-2.5">
+                                <?php $__currentLoopData = $periods; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $per): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <option value="<?php echo e($per->id); ?>"><?php echo e($per->name); ?></option>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Tentukan Peran (Role)</label>
+                            <select name="assigned_role" class="w-full bg-[#F4F7FE] border-none text-sm font-medium text-slate-700 rounded-xl px-4 py-2.5">
+                                <option value="Anggota">Anggota Biasa</option>
+                                <option value="Pengurus">Pengurus HIMA</option>
+                                <option value="Kepala Divisi">Kepala Divisi</option>
+                                <option value="BPH">Pengurus Inti (BPH)</option>
+                            </select>
+                        </div>
                     </div>
-                </div>
 
-                <div x-show="choice !== 'Terima'">
-                    <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Beri Catatan Alasan / Instruksi Revisi</label>
-                    <textarea name="admin_notes" rows="3" placeholder="Contoh: Format NIM salah atau mohon ganti foto..." class="w-full bg-[#F4F7FE] border-none text-sm font-medium text-slate-700 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-red-500"></textarea>
-                </div>
+                    <div x-show="choice !== 'Terima'">
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Beri Catatan Alasan / Instruksi Revisi</label>
+                        <textarea name="admin_notes" rows="3" placeholder="Contoh: Format NIM salah atau mohon ganti foto..." class="w-full bg-[#F4F7FE] border-none text-sm font-medium text-slate-700 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-red-500"></textarea>
+                    </div>
 
-                <button type="submit" class="w-full py-3 bg-[#5442F5] hover:bg-[#4331e5] text-white text-sm font-extrabold rounded-xl shadow-md transition-colors">
-                    Sahkan Keputusan
-                </button>
+                    <!-- Text bantuan untuk memastikan Target URL masuk -->
+                    <p class="text-[11px] text-slate-400 font-medium text-center">Menuju Target URL: <span x-text="actionUrl"></span></p>
+
+                    <button type="submit" class="w-full py-3 bg-[#5442F5] hover:bg-[#4331e5] text-white text-sm font-extrabold rounded-xl shadow-md transition-colors">
+                        Sahkan Keputusan
+                    </button>
+                </div>
             </form>
         </div>
     </div>
